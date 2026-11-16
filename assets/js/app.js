@@ -11,168 +11,18 @@
     'Кокосовое мороженое', 'Лаванда'
   ];
   const AROMA_LATER = 'Подобрать при оформлении';
-  const PRODUCTS = {
-  "elka-shkatulka": {
-    "name": "Ёлка-шкатулка",
-    "image": "tree-box.webp",
-    "price": 5000
-  },
-  "igrushki-garri-ron-germiona": {
-    "name": "Набор ёлочных игрушек «Рон, Гарри, Гермиона»",
-    "image": "ornaments-trio.webp",
-    "price": 2700,
-    "variants": [
-      {
-        "id": "set",
-        "name": "Набор 3 шт.",
-        "price": 2700
-      },
-      {
-        "id": "ron",
-        "name": "Рон",
-        "price": 1100
-      },
-      {
-        "id": "garri",
-        "name": "Гарри",
-        "price": 1100
-      },
-      {
-        "id": "germiona",
-        "name": "Гермиона",
-        "price": 1100
-      }
-    ]
-  },
-  "kruzhka-magiya-hogvartsa": {
-    "name": "Кружка HP «Магия Хогвартса»",
-    "image": "mug-letter.webp",
-    "price": 4000
-  },
-  "elka-svecha": {
-    "name": "Ёлка со свечой внутри",
-    "image": "tree-candle.webp",
-    "price": 6000,
-    "scents": true
-  },
-  "kruzhka-hogwarts": {
-    "name": "Тёмно-синяя кружка Hogwarts",
-    "image": "mug-hogwarts.webp",
-    "price": null
-  },
-  "svecha-shlyapa": {
-    "name": "Аромасвеча «Распределяющая шляпа»",
-    "image": "candle-hat.webp",
-    "price": 4000,
-    "scents": true
-  },
-  "kruzhka-kukolka-hanna": {
-    "name": "Кружка «Куколка Ханна»",
-    "image": "cup-hanna.webp",
-    "price": 2500
-  },
-  "nebesnaya-feya": {
-    "name": "Кружка и ложечка «Небесная фея»",
-    "image": "fairy-sky.webp",
-    "price": 3700,
-    "variants": [
-      {
-        "id": "set",
-        "name": "Набор: кружка + ложечка",
-        "price": 3700
-      },
-      {
-        "id": "mug",
-        "name": "Кружка (повтор)",
-        "price": 3200
-      },
-      {
-        "id": "spoon",
-        "name": "Ложечка",
-        "price": 800
-      }
-    ]
-  },
-  "cvetochnaya-feya": {
-    "name": "Кружка и ложечка «Цветочная фея»",
-    "image": "fairy-flower.webp",
-    "price": 3700,
-    "variants": [
-      {
-        "id": "set",
-        "name": "Набор: кружка + ложечка",
-        "price": 3700
-      },
-      {
-        "id": "mug",
-        "name": "Кружка",
-        "price": 3000
-      },
-      {
-        "id": "spoon",
-        "name": "Ложечка",
-        "price": 1100
-      }
-    ]
-  },
-  "kruzhka-aurora": {
-    "name": "Кружка «Малышка Аврора»",
-    "image": "cup-aurora.webp",
-    "price": 2500
-  },
-  "kruzhka-slonenok": {
-    "name": "Кружка «Маленький слонёнок»",
-    "image": "cup-baby-elephant.webp",
-    "price": 2200
-  },
-  "kruzhka-vintazhnyy-mishka": {
-    "name": "Кружка «Винтажный мишка»",
-    "image": "vintage-bear.webp",
-    "price": 3000
-  },
-  "lozhechka-bear-love": {
-    "name": "Ложечка «Bear love»",
-    "image": "spoon-bear-love.webp",
-    "price": 1200
-  },
-  "brosh-vintazhnyy-slonik": {
-    "name": "Брошечка «Винтажный слоник»",
-    "image": "brooch-elephant.webp",
-    "price": 900
-  },
-  "zakladki-dlya-knig": {
-    "name": "Закладки для книг",
-    "image": "bookmarks.webp",
-    "price": 350,
-    "variants": [
-      {
-        "id": "one",
-        "name": "1 закладка",
-        "price": 350
-      },
-      {
-        "id": "five",
-        "name": "Набор 5 закладок",
-        "price": 1250
-      }
-    ]
-  },
-  "kruzhka-vintazhnyy-slonenok": {
-    "name": "Кружка «Винтажный слонёнок»",
-    "image": "cup-vintage-elephant.webp",
-    "price": 2500
-  },
-  "lozhechka-snegovichok": {
-    "name": "Ложечка «Снеговичок»",
-    "image": "spoon-snowman.webp",
-    "price": 1100
-  },
-  "kruzhka-rozhdestvenskiy-venok": {
-    "name": "Кружка «Рождественский венок»",
-    "image": "cup-wreath.webp",
-    "price": 2490
-  }
-};
+  // A single editable catalog shared by the storefront, cart and product pages.
+  const CATALOG = Array.isArray(window.ART_MIMISHKA_CATALOG) ? window.ART_MIMISHKA_CATALOG.filter(p => p && p.active !== false && p.id) : [];
+  const PRODUCTS = Object.fromEntries(CATALOG.map(p => [p.id, {
+    name: p.title || p.name || 'Изделие',
+    image: p.image || '',
+    price: Number.isFinite(Number(p.price_rub)) && p.price_rub !== null && p.price_rub !== '' ? Number(p.price_rub) : null,
+    variants: Array.isArray(p.variants) && p.variants.length ? p.variants.map(v => ({id:v.id,name:v.title||v.name,price:Number(v.price_rub ?? v.price)})) : undefined,
+    scents: Boolean(p.scents),
+    source:p
+  }]));
+  const STATIC_PRODUCT_IDS = new Set(["cvetochnaya-feya", "elka-shkatulka", "elka-svecha", "igrushki-garri-ron-germiona", "kruzhka-aurora", "kruzhka-hogwarts", "kruzhka-magiya-hogvartsa", "kruzhka-rozhdestvenskiy-venok", "kruzhka-slonenok", "kruzhka-vintazhnyy-mishka", "kruzhka-vintazhnyy-slonenok", "svecha-shlyapa", "zakladki-dlya-knig"]);
+
 
   const KEY = 'artmimishka_cart_v3';
   const OLD_KEY = 'artmimishka_cart_v2';
@@ -185,9 +35,74 @@
     'checkout-dialog': 'checkout-scrim',
     'product-config': 'config-scrim'
   };
-  const prefix = location.pathname.includes('/products/') ? '../../' :
+  const prefix = /\/products\//.test(location.pathname) ? '../../' :
     /\/(catalog|privacy|oferta|nalichie|kukolkahanna|volshebnyefei|rozhdestvenskayaprincessa)\//.test(location.pathname) ? '../' : '';
   const rub = n => n == null ? 'Цена уточняется' : new Intl.NumberFormat('ru-RU').format(n) + ' ₽';
+  const htmlEscape = value => String(value ?? '').replace(/[&<>"']/g, x => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
+  const productImage = p => {
+    const src = p?.image || '';
+    return /^(data:|https?:|blob:)/.test(src) ? src : prefix + 'assets/img/' + encodeURI(src);
+  };
+  const productHref = p => STATIC_PRODUCT_IDS.has(p.id)
+    ? prefix + 'products/' + encodeURIComponent(p.id) + '/index.html'
+    : prefix + 'products/view/index.html?id=' + encodeURIComponent(p.id);
+  const bagSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12l1 12H5L6 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>`;
+  function renderCatalog() {
+    const grid = $('.a15-catalog-grid');
+    const otherGrid = $('.studio-products-grid:not(.a15-catalog-grid)');
+    const visible = CATALOG.slice().sort((a,b) => (a.rank ?? 999) - (b.rank ?? 999));
+    if (grid) grid.innerHTML = visible.map((p,i) => {
+      const href = productHref(p), name=htmlEscape(p.title), image=htmlEscape(productImage(p));
+      const price=PRODUCTS[p.id].price == null ? 'Цена по запросу' : rub(PRODUCTS[p.id].price);
+      const old = Number(p.old_price_rub)>Number(p.price_rub) && p.price_rub!==null ? `<del class="a16-old-price">${rub(Number(p.old_price_rub))}</del>` : '';
+      return `<article class="a15-item product-card studio-card" data-category="${htmlEscape(p.category)} ${p.scents?'candles':''}" data-new="${p.new ? 'true':'false'}" data-title="${name}" data-rank="${p.rank??i+1}" data-price="${PRODUCTS[p.id].price ?? 99999999}">
+        <a class="a15-item-photo" href="${href}" aria-label="Подробнее: ${name}"><img src="${image}" alt="${name} — фотография изделия" loading="lazy" decoding="async"></a>
+        <button class="a15-heart" data-favorite="${htmlEscape(p.id)}" type="button" aria-label="В избранное: ${name}" aria-pressed="false">♡</button>
+        <div class="a15-item-info"><a class="a15-item-name" href="${href}">${name}</a><div class="a15-item-bottom"><strong>${price}</strong>${old}<button type="button" class="a15-bag" data-add-cart="${htmlEscape(p.id)}" aria-label="Добавить в корзину: ${name}">${bagSvg}</button></div></div></article>`;
+    }).join('');
+    if (otherGrid) otherGrid.innerHTML = visible.map((p,i) => {
+      const href = productHref(p), name=htmlEscape(p.title), image=htmlEscape(productImage(p));
+      const price=PRODUCTS[p.id].price == null ? 'Цена по запросу' : rub(PRODUCTS[p.id].price);
+      const old = Number(p.old_price_rub)>Number(p.price_rub) && p.price_rub!==null ? `<del class="a16-old-price">${rub(Number(p.old_price_rub))}</del>` : '';
+      return `<article class="product-card studio-card" data-category="${htmlEscape(p.category)} ${p.scents?'candles':''}" data-new="${p.new?'true':'false'}" data-title="${name}" data-rank="${p.rank??i+1}" data-price="${PRODUCTS[p.id].price??99999999}">
+         <a class="product-image" href="${href}" aria-label="Подробнее: ${name}"><img alt="${name}" src="${image}" loading="lazy" decoding="async"></a>
+         <div class="product-info"><span class="product-category">${htmlEscape(p.kind||p.subtitle||'Ручная работа')}</span><h3><a href="${href}">${name}</a></h3><div class="product-foot"><span class="price-now">${price}</span>${old}<button class="cart-mini" data-add-cart="${htmlEscape(p.id)}" type="button" aria-label="Добавить в корзину: ${name}">${bagSvg}</button></div></div></article>`;
+    }).join('');
+  }
+  function renderBestsellers() {
+    const grid=$('.a15-best-grid');
+    if(!grid)return;
+    const featured=CATALOG.filter(p=>p.featured).sort((a,b)=>(a.rank??999)-(b.rank??999));
+    const ordered=[...featured,...CATALOG.filter(p=>!p.featured).sort((a,b)=>(a.rank??999)-(b.rank??999))];
+    grid.innerHTML=ordered.slice(0,3).map(p=>{
+      const title=htmlEscape(p.title),href=productHref(p),src=htmlEscape(productImage(p));
+      return `<article class="a15-bestseller"><a class="a15-bestseller-img" href="${href}"><img src="${src}" alt="${title}" loading="eager"></a><div class="a15-bestseller-copy"><a class="a15-bestseller-name" href="${href}">${title}</a><p>${htmlEscape(p.description||'Изделие ручной работы')}</p><div class="a15-bestseller-price">${rub(PRODUCTS[p.id].price)}</div><button type="button" class="a15-best-buy" data-add-cart="${htmlEscape(p.id)}">В корзину <span>›</span></button></div><button type="button" class="a15-best-heart" data-favorite="${htmlEscape(p.id)}" aria-label="В избранное: ${title}" aria-pressed="false">♡</button></article>`;
+    }).join('');
+  }
+  function refreshProductDetail() {
+    const slug = /\/products\/([^/]+)\//.exec(location.pathname)?.[1];
+    const id = slug === 'view' ? new URLSearchParams(location.search).get('id') : slug;
+    if (!id || !PRODUCTS[id]) return;
+    const product = PRODUCTS[id]; const p = product.source;
+    document.title = p.title + ' — ART MIMISHKA';
+    const img = $('.detail-gallery img');
+    if (img) {img.src=productImage(p);img.alt=p.title+' — фотография изделия';}
+    const h1 = $('.detail-info h1');if(h1)h1.textContent=p.title;
+    const sub=$('.detail-subtitle');if(sub)sub.textContent=p.description || '';
+    const summary=$('.detail-info > p:not(.detail-subtitle):not(.helper)');if(summary)summary.textContent=p.description || p.long || '';
+    const kind=$('.detail-info .eyebrow');if(kind)kind.textContent=(p.kind||'Авторская работа')+' · ART MIMISHKA';
+    const priceInfo=$('.detail-meta');
+    if(priceInfo){priceInfo.replaceChildren();
+      const rows=[['Стоимость',rub(product.price)], ...(p.specifications||[]).map(o=>[o.name,o.value]), ['Наличие и сроки','Уточняются при заказе']];
+      for (const [label,value] of rows) {const row=document.createElement('div');const sp=document.createElement('span');sp.textContent=label;const strong=document.createElement('strong');strong.textContent=value;row.append(sp,strong);priceInfo.append(row);}
+    }
+    const story = $('.product-story-main');
+    if (story){const ps=$$('p',story);if(ps[0])ps[0].textContent=p.long||p.description||'';if(ps[1])ps[1].remove();}
+    $$('[data-add-cart]', $('.detail-actions')||document).forEach(el=>el.dataset.addCart=id);
+  }
+  renderCatalog();
+  renderBestsellers();
+  refreshProductDetail();
   const clampQuantity = n => Math.max(0, Math.min(99, Number.isInteger(n) ? n : 0));
   let cart = [];
   let currentConfig = null;
@@ -287,8 +202,24 @@
     const name = p.name + (optionLabel(row) ? ' · ' + optionLabel(row) : '');
     const label = $('#success-product');
     if (label) label.textContent = name + ' — ' + rub(unitPrice(row));
+    renderSuccessSummary();
     displayModal('cart-success', '[data-checkout]');
     track('add_to_cart', {product: id, variant: row.variant, scent: row.scent, price: unitPrice(row)});
+  }
+  function renderSuccessSummary(){
+    const area=$('#success-items'), total=$('#success-total');
+    if(!area)return;
+    area.replaceChildren();
+    cart.forEach(row=>{
+      const p=PRODUCTS[row.id];if(!p)return;
+      const item=node('div','a16-success-row');
+      const img=node('img'); img.src=productImage(p);img.alt='';img.loading='lazy';
+      const body=node('div');body.append(node('b','',p.name));
+      const opt=optionLabel(row);if(opt)body.append(node('small','',opt));
+      body.append(node('span','',row.quantity+' шт. · '+(unitPrice(row)==null?'Цена по запросу':rub(unitPrice(row)*row.quantity))));
+      item.append(img,body);area.append(item);
+    });
+    if(total)total.textContent=hasUnknown()?'В корзине '+count()+' шт. · известная сумма '+rub(sumKnown()):'В корзине '+count()+' шт. · итого '+rub(sumKnown());
   }
   function openConfig(id) {
     const p = PRODUCTS[id];
@@ -360,7 +291,7 @@
       const p = PRODUCTS[row.id];
       const item = node('div', 'cart-item');
       const pic = node('img');
-      pic.src = prefix + 'assets/img/' + p.image;
+      pic.src = productImage(p);
       pic.alt = '';
       pic.loading = 'lazy';
       const body = node('div');

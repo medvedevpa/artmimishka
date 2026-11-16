@@ -25,7 +25,13 @@
         "name": "Назначение",
         "value": "Декоративная шкатулка"
       }
-    ]
+    ],
+    "rank": 1,
+    "active": true,
+    "old_price_rub": null,
+    "scents": false,
+    "variants": [],
+    "featured": true
   },
   {
     "id": "igrushki-garri-ron-germiona",
@@ -87,7 +93,12 @@
         "title": "Гермиона",
         "price_rub": 1100
       }
-    ]
+    ],
+    "rank": 2,
+    "active": true,
+    "old_price_rub": null,
+    "scents": false,
+    "featured": true
   },
   {
     "id": "kruzhka-magiya-hogvartsa",
@@ -111,7 +122,13 @@
         "name": "Тематика",
         "value": "Письмо, снитч, палочка, платформа 9¾"
       }
-    ]
+    ],
+    "rank": 3,
+    "active": true,
+    "old_price_rub": null,
+    "scents": false,
+    "variants": [],
+    "featured": true
   },
   {
     "id": "elka-svecha",
@@ -161,7 +178,13 @@
       "Какао",
       "Кокосовое мороженое",
       "Лаванда"
-    ]
+    ],
+    "rank": 4,
+    "active": true,
+    "old_price_rub": null,
+    "scents": true,
+    "variants": [],
+    "featured": false
   },
   {
     "id": "kruzhka-hogwarts",
@@ -185,7 +208,13 @@
         "name": "Цена",
         "value": "Уточняется в переписке"
       }
-    ]
+    ],
+    "rank": 5,
+    "active": true,
+    "old_price_rub": null,
+    "scents": false,
+    "variants": [],
+    "featured": false
   },
   {
     "id": "svecha-shlyapa",
@@ -243,72 +272,13 @@
       "Какао",
       "Кокосовое мороженое",
       "Лаванда"
-    ]
-  },
-  {
-    "id": "kruzhka-kukolka-hanna",
-    "title": "Кружка «Куколка Ханна»",
-    "subtitle": "Кружка с авторским декором",
-    "category": "mugs",
-    "kind": "Кружка с авторским декором",
-    "image": "cup-hanna.webp",
-    "editorial": "cup-hanna.webp",
-    "status": "Авторская работа",
-    "new": false,
-    "description": "Кружка с нежной куколкой ручной лепки.",
-    "long": "Кружка с нежной куколкой ручной лепки. Каждое изделие выполняется и оформляется вручную. Наличие и сроки изготовления уточняются при заказе.",
-    "price_rub": 2500,
-    "specifications": [
-      {
-        "name": "Изготовление",
-        "value": "Ручная работа"
-      },
-      {
-        "name": "Наличие",
-        "value": "Уточняется при заказе"
-      }
-    ]
-  },
-  {
-    "id": "nebesnaya-feya",
-    "title": "Кружка и ложечка «Небесная фея»",
-    "subtitle": "Набор с авторской лепкой",
-    "category": "mugs spoons",
-    "kind": "Набор с авторской лепкой",
-    "image": "fairy-sky.webp",
-    "editorial": "fairy-sky.webp",
-    "status": "Авторская работа",
-    "new": false,
-    "description": "Нежный комплект: кружка и ложечка с феей.",
-    "long": "Оригинальной кружки на фотографии в наличии нет: возможен повтор за 3 200 ₽. Ложечка — 800 ₽, набор (повтор кружки + ложечка) — 3 700 ₽. Наличие и срок изготовления уточняются при заказе.",
-    "price_rub": 3700,
-    "specifications": [
-      {
-        "name": "Изготовление",
-        "value": "Ручная работа"
-      },
-      {
-        "name": "Наличие",
-        "value": "Уточняется при заказе"
-      }
     ],
-    "variants": [
-      {
-        "id": "set",
-        "title": "Набор: кружка + ложечка",
-        "price_rub": 3700
-      },
-      {
-        "id": "mug",
-        "title": "Кружка (повтор)",
-        "price_rub": 3200
-      },
-      {
-        "id": "spoon",
-        "title": "Ложечка",
-        "price_rub": 800
-      }
-    ]
+    "rank": 6,
+    "active": true,
+    "old_price_rub": null,
+    "scents": true,
+    "variants": [],
+    "featured": false
   },
   {
     "id": "cvetochnaya-feya",
@@ -349,7 +319,12 @@
         "title": "Ложечка",
         "price_rub": 1100
       }
-    ]
+    ],
+    "rank": 7,
+    "active": true,
+    "old_price_rub": null,
+    "scents": false,
+    "featured": false
   },
   {
     "id": "kruzhka-aurora",
@@ -373,7 +348,13 @@
         "name": "Наличие",
         "value": "Уточняется при заказе"
       }
-    ]
+    ],
+    "rank": 8,
+    "active": true,
+    "old_price_rub": null,
+    "scents": false,
+    "variants": [],
+    "featured": false
   },
   {
     "id": "kruzhka-slonenok",
@@ -397,7 +378,13 @@
         "name": "Наличие",
         "value": "Уточняется при заказе"
       }
-    ]
+    ],
+    "rank": 9,
+    "active": true,
+    "old_price_rub": null,
+    "scents": false,
+    "variants": [],
+    "featured": false
   },
   {
     "id": "kruzhka-vintazhnyy-mishka",
@@ -421,55 +408,13 @@
         "name": "Наличие",
         "value": "Уточняется при заказе"
       }
-    ]
-  },
-  {
-    "id": "lozhechka-bear-love",
-    "title": "Ложечка «Bear love»",
-    "subtitle": "Ложечка с декором",
-    "category": "spoons",
-    "kind": "Ложечка с декором",
-    "image": "spoon-bear-love.webp",
-    "editorial": "spoon-bear-love.webp",
-    "status": "Авторская работа",
-    "new": false,
-    "description": "Маленький мишка с сердцем — милая деталь подарка.",
-    "long": "Маленький мишка с сердцем — милая деталь подарка. Каждое изделие выполняется и оформляется вручную. Наличие и сроки изготовления уточняются при заказе.",
-    "price_rub": 1200,
-    "specifications": [
-      {
-        "name": "Изготовление",
-        "value": "Ручная работа"
-      },
-      {
-        "name": "Наличие",
-        "value": "Уточняется при заказе"
-      }
-    ]
-  },
-  {
-    "id": "brosh-vintazhnyy-slonik",
-    "title": "Брошечка «Винтажный слоник»",
-    "subtitle": "Брошь ручной работы",
-    "category": "accessories",
-    "kind": "Брошь ручной работы",
-    "image": "brooch-elephant.webp",
-    "editorial": "brooch-elephant.webp",
-    "status": "Авторская работа",
-    "new": false,
-    "description": "Винтажная миниатюра в виде слоника.",
-    "long": "Винтажная миниатюра в виде слоника. Каждое изделие выполняется и оформляется вручную. Наличие и сроки изготовления уточняются при заказе.",
-    "price_rub": 900,
-    "specifications": [
-      {
-        "name": "Изготовление",
-        "value": "Ручная работа"
-      },
-      {
-        "name": "Наличие",
-        "value": "Уточняется при заказе"
-      }
-    ]
+    ],
+    "rank": 10,
+    "active": true,
+    "old_price_rub": null,
+    "scents": false,
+    "variants": [],
+    "featured": false
   },
   {
     "id": "zakladki-dlya-knig",
@@ -505,7 +450,12 @@
         "title": "Набор 5 закладок",
         "price_rub": 1250
       }
-    ]
+    ],
+    "rank": 11,
+    "active": true,
+    "old_price_rub": null,
+    "scents": false,
+    "featured": false
   },
   {
     "id": "kruzhka-vintazhnyy-slonenok",
@@ -529,31 +479,13 @@
         "name": "Наличие",
         "value": "Уточняется при заказе"
       }
-    ]
-  },
-  {
-    "id": "lozhechka-snegovichok",
-    "title": "Ложечка «Снеговичок»",
-    "subtitle": "Ложечка с декором",
-    "category": "spoons",
-    "kind": "Ложечка с декором",
-    "image": "spoon-snowman.webp",
-    "editorial": "spoon-snowman.webp",
-    "status": "Авторская работа",
-    "new": false,
-    "description": "Зимняя ложечка со снеговичком ручной лепки.",
-    "long": "В наличии указана ложечка слева на фотографии. Второй вариант справа может отсутствовать. Уточните наличие перед заказом.",
-    "price_rub": 1100,
-    "specifications": [
-      {
-        "name": "Изготовление",
-        "value": "Ручная работа"
-      },
-      {
-        "name": "Наличие",
-        "value": "Уточняется при заказе"
-      }
-    ]
+    ],
+    "rank": 12,
+    "active": true,
+    "old_price_rub": null,
+    "scents": false,
+    "variants": [],
+    "featured": false
   },
   {
     "id": "kruzhka-rozhdestvenskiy-venok",
@@ -577,6 +509,12 @@
         "name": "Наличие",
         "value": "Уточняется при заказе"
       }
-    ]
+    ],
+    "rank": 13,
+    "active": true,
+    "old_price_rub": null,
+    "scents": false,
+    "variants": [],
+    "featured": false
   }
 ]
