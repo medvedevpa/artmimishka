@@ -1,0 +1,106 @@
+@charset "UTF-8";
+/* Atelier v13 — crisp desktop artwork and stable vector transitions.
+   Artwork is kept at its ORIGINAL aspect ratio. All merchandising and actions are HTML.
+   Mobile-specific composition from v12 is retained. */
+:root{--v13-gold:#edbf79;--v13-ivory:#ffedcf;--v13-plum:#351326}
+body.v12{background:#fff1de}
+.v12-main{overflow:hidden}
+.v13-hero{width:100%;max-width:1680px;margin:0 auto;position:relative;height:min(40vw,672px);min-height:460px;overflow:visible;z-index:3;background:#1b0f21}
+.v13-hero .v13-artwork{position:absolute;inset:0;overflow:hidden;height:100%;width:100%;display:block}
+.v13-artwork img{width:100%!important;height:100%!important;max-height:none!important;display:block;object-fit:cover!important;object-position:center top!important;filter:saturate(1.025) contrast(1.02)}
+.v13-hero .v13-artwork::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(19,9,28,.83) 0%,rgba(25,11,32,.72) 17%,rgba(26,10,30,.45) 34%,transparent 54%),linear-gradient(0deg,rgba(42,13,31,.10) 0%,transparent 30%)}
+.v13-copy{position:absolute;z-index:5;left:clamp(36px,5.8%,116px);top:clamp(40px,8.5%,78px);width:min(38%,550px);color:#ffedca;text-shadow:0 3px 23px #15081a9e;pointer-events:auto}
+.v13-eyebrow{display:inline-flex;align-items:center;gap:.65em;margin:0 0 clamp(20px,2.1vw,28px);font:700 clamp(.67rem,.78vw,.86rem)/1.3 Arial,sans-serif;letter-spacing:.16em;color:#f0c986}
+.v13-eyebrow span{font-size:1.5em}
+.v13-copy h1{margin:0;color:#ffe9bf;font:italic normal clamp(3.35rem,5.7vw,6.45rem)/.97 Georgia,'Times New Roman',serif!important;letter-spacing:-.045em;text-wrap:balance;text-shadow:0 4px 17px rgba(0,0,0,.55),0 1px 1px #eaba72a6}
+.v13-copy h1 em{font-weight:400}
+.v13-copy-rule{display:block;margin:18px 0 8px;color:#e8b777;font:normal 1.1rem Georgia,serif;letter-spacing:.12em}
+.v13-copy-rule:before,.v13-copy-rule:after{content:"";display:inline-block;vertical-align:middle;width:72px;height:1px;background:linear-gradient(90deg,transparent,#d7a15c);margin:0 10px}
+.v13-copy-rule:after{transform:scaleX(-1)}
+.v13-copy p{font:italic normal clamp(.98rem,1.34vw,1.30rem)/1.42 Georgia,serif;color:#f6e4db;max-width:360px;margin:4px 0 28px}
+.v13-hero-button{display:inline-flex;align-items:center;justify-content:center;min-height:52px;gap:24px;padding:10px 24px;color:#3d1c2e;background:linear-gradient(175deg,#fff4d2 0%,#f9d595 58%,#e3aa62 100%);border:1px solid #ffdb94;border-radius:999px;font:700 .97rem/1.1 Georgia,serif;text-decoration:none;box-shadow:0 5px 22px rgba(31,10,24,.30),inset 0 1px 0 #fffbed;transition:filter .2s,transform .2s}
+.v13-hero-button:hover{filter:brightness(1.07);transform:translateY(-2px)}
+.v13-hero-button span{font-size:1.5rem;line-height:1}
+.v13-scarf{position:absolute;z-index:4;pointer-events:none;left:0;top:90%;width:100%;height:auto!important;max-width:none!important;mask-image:linear-gradient(to bottom,#000 0%,#000 31%,rgba(0,0,0,.90) 62%,transparent 97%);-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 31%,rgba(0,0,0,.90) 62%,transparent 97%)}
+.v13-magical-dust{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:.6;background-image:radial-gradient(circle,#ffdf9e 0 1px,transparent 2px),radial-gradient(circle,#f2bd6c 0 1.5px,transparent 3px);background-size:210px 170px,370px 300px;background-position:28% 18%,70% 68%;mask-image:linear-gradient(90deg,transparent 15%,#000 48%,transparent 95%);animation:v13-shimmer 6s ease-in-out infinite alternate}
+@keyframes v13-shimmer{from{opacity:.14}to{opacity:.63}}
+.v13-hero .v12-hit--tree{left:56%;top:2%;width:23%;height:94%}
+.v13-hero .v12-hit--mug{left:79%;top:37%;width:20%;height:60%}
+.v13-hero .v12-hit--ornaments{left:38%;top:34%;width:20%;height:66%}
+.v12-best{z-index:2!important;padding:185px 0 95px!important;margin-top:0!important;background:radial-gradient(ellipse 80% 42% at 50% 0%,#6c2a4799,transparent 74%),linear-gradient(180deg,#391329,#351326 65%,#3b142b)!important}
+.v12-best .v12-title{position:relative!important;width:auto!important;height:auto!important;overflow:visible!important;clip:auto!important;white-space:normal!important;margin:0 auto 34px!important}
+.v12-best .v12-title h2{font-size:clamp(2.8rem,4vw,4.9rem);color:#f2c98d}
+.v12-best-grid{gap:22px}
+.v12-bestseller{height:clamp(202px,15.5vw,250px);border-radius:16px;border:1.5px solid #e5ac65;box-shadow:inset 0 0 0 4px #371426,inset 0 0 0 5px #9c6f438f,0 14px 34px #1a06197d;outline:1px solid #694027;outline-offset:3px}
+.v12-bestseller:before,.v12-bestseller:after{font-family:Georgia,serif;font-size:23px;color:#ffd396}
+.v12-best-image img{object-fit:cover;object-position:center}
+.v12-best-copy{padding:19px 12px 17px}
+.v12-best-copy h3{font-size:clamp(1.12rem,1.37vw,1.46rem)}
+.v12-best-copy p{font-size:.83rem}
+.v12-best-copy b{font-size:1.24rem}
+/* All waves are actual SVG paths with non-scaling 2px strokes, unlike stretched CSS backgrounds. */
+.v12-transition{background-image:none!important;background:none!important;bottom:-1px!important;height:96px!important;width:100%!important;z-index:8!important}
+.v13-wave-svg{display:block;width:100%;height:100%}
+.v12-catalog{padding-top:44px!important}
+.v12-courses{padding-top:42px!important}
+.v12-footer{border-top:0!important}
+/* polish desktop cards, consistent square photos and aligned price rows */
+.v12-grid{gap:19px}
+.v12-product{overflow:hidden}
+.v12-product-image{aspect-ratio:1/1!important}
+.v12-product-image img{object-fit:cover!important}
+.v12-product-info{padding:13px 14px 14px;min-height:96px}
+.v12-product-bottom{margin-top:auto}
+@media(min-width:1681px){.v13-hero{height:672px}}
+@media(min-width:851px) and (max-width:1250px){
+ .v13-hero{min-height:400px}
+ .v13-copy{top:8.5%;left:5.5%;width:38%}
+ .v13-copy h1{font-size:clamp(3rem,5.5vw,4.7rem)!important}
+ .v13-copy p{font-size:clamp(.85rem,1.25vw,1.05rem);margin-bottom:14px}
+ .v13-copy-rule{margin:9px 0 3px}
+ .v13-eyebrow{margin-bottom:15px;font-size:.64rem}
+ .v13-hero-button{min-height:42px;padding:9px 17px;font-size:.83rem}
+ .v12-best{padding-top:148px!important}
+ .v12-best-copy p{font-size:.72rem}
+ .v12-best-copy h3{font-size:1.13rem}
+}
+@media(max-width:850px){
+ /* The existing mobile art and interactive layout stay intact. */
+ .v13-hero{max-width:none;width:100%;height:auto;min-height:0;overflow:hidden}
+ .v13-hero .v13-artwork{position:relative;inset:auto;width:100%;height:auto}
+ .v13-artwork img{width:100%!important;height:auto!important;object-fit:contain!important;filter:none}
+ .v13-hero .v13-artwork::after{display:none}
+ .v13-copy,.v13-scarf,.v13-magical-dust{display:none!important}
+ .v13-hero .v12-hit--tree{left:5%;top:22%;width:25%;height:42%}
+ .v13-hero .v12-hit--mug{left:31%;top:36%;width:24%;height:29%}
+ .v13-hero .v12-hit--ornaments{left:64%;top:25%;width:31%;height:41%}
+ .v12-mobile-cta{display:inline-flex;position:absolute;z-index:3;bottom:10%;left:50%;transform:translateX(-50%);border:1px solid #fce6b8;border-radius:999px;padding:7px 19px;background:linear-gradient(180deg,#fce8ba,#efbc77);box-shadow:0 6px 20px #210a1eb3;color:#4c2540;font:bold .73rem Arial,sans-serif;text-decoration:none;white-space:nowrap;align-items:center;gap:10px}
+ .v12-best{padding:10px 0 68px!important}
+ .v12-best .v12-title{margin:0 auto 18px!important}
+ .v12-best .v12-title h2{font-size:clamp(2rem,6.2vw,3rem)!important}
+ .v12-bestseller{height:155px;outline-offset:0;outline:0}
+ .v12-best-grid{gap:11px}
+ .v12-transition{height:62px!important}
+ .v12-catalog{padding-top:26px!important}
+ .v12-courses{padding-top:25px!important}
+}
+@media(max-width:420px){
+ .v12-best{padding-top:5px!important}
+ .v12-bestseller{height:139px}
+ .v12-best-copy{padding:10px 8px 9px 11px}
+ .v12-best-copy h3{font-size:1rem}
+ .v12-best-copy b{font-size:.91rem}
+ .v12-best-copy p{font-size:.67rem}
+ .v12-transition{height:51px!important}
+}
+@media(prefers-reduced-motion:reduce){.v13-magical-dust{animation:none}}
+
+/* Mobile poster already contains the editorial 'Бестселлеры' lettering. */
+@media(max-width:850px){
+  .v12-best .v12-title{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;margin:-1px!important}
+}
+.v13-brand-mark{display:block;width:34px;height:41px;flex:none;filter:drop-shadow(0 0 5px rgba(241,188,107,.13))}
+@media(max-width:420px){.v13-brand-mark{width:25px;height:32px}}
+/* On ultrawide screens keep the theatre backdrop continuous beyond the
+   native-width artwork rather than exposing parchment-coloured sidebars. */
+.v12-main{background:#301123}

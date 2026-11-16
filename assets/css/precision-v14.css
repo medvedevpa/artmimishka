@@ -1,0 +1,212 @@
+@charset "UTF-8";
+/* ART MIMISHKA v14 — alignment and collision fixes.
+   Deliberately scoped to the Atelier home page; product pages retain their layout. */
+:root {
+  --atelier-gold-line: #edbd79;
+  --atelier-surface: #fff1de;
+}
+body.v12, body.v12 * { box-sizing: border-box; }
+body.v12 { text-rendering: optimizeLegibility; }
+.v12-main { overflow: clip; }
+/* A cropped copy of the hero image had been positioned over the hero ending.
+   It repeated toys, tree and scarf with a visible seam. Use the actual artwork
+   once and fade its lower edge into the plum Bestsellers section instead. */
+.v13-scarf { display: none !important; }
+.v13-hero .v13-artwork::after {
+  background:
+    linear-gradient(180deg, transparent 72%, rgba(53,19,38,.18) 83%, #351326 100%),
+    linear-gradient(90deg, rgba(19,9,28,.83) 0%, rgba(25,11,32,.68) 17%, rgba(26,10,30,.38) 34%, transparent 55%) !important;
+}
+.v12-best {
+  padding: 40px 0 118px !important;
+  background:
+    radial-gradient(ellipse 70% 34% at 50% 0%, rgba(111,48,76,.46), transparent 82%),
+    linear-gradient(180deg,#351326 0%, #371326 68%, #38142b 100%) !important;
+}
+.v12-best .v12-title { margin-bottom: 28px !important; }
+.v12-best-grid { align-items: stretch; gap: 20px; }
+.v12-bestseller {
+  height: auto !important;
+  min-height: 240px;
+  grid-template-columns: minmax(0,44%) minmax(0,56%);
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 16px;
+  outline: none;
+  background: #351326;
+  box-shadow: inset 0 0 0 3px #381527, inset 0 0 0 4px #9164439e, 0 11px 32px #1908176a;
+}
+/* Do not let ornamental symbols cover price/action text. */
+.v12-bestseller::before,.v12-bestseller::after { font-size: 17px; opacity:.75; }
+.v12-best-image { min-width:0; min-height:100%; }
+.v12-best-image img { height:100%; width:100%; object-fit:cover; }
+.v12-best-copy {
+  min-width: 0;
+  height:100%;
+  padding: 22px 16px 18px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 0;
+}
+.v12-best-copy h3 { max-width: calc(100% - 10px); margin: 0 0 9px; line-height:1.14; overflow-wrap:anywhere; }
+.v12-best-copy p { max-width:100%; font-size: .82rem; line-height:1.36; margin:0 0 13px; -webkit-line-clamp:unset; display:block; overflow:visible; }
+.v12-best-copy b { margin: auto 0 10px; line-height:1.2; }
+.v12-best .v12-gold-cta {
+  min-height: 34px;
+  width: auto;
+  max-width:100%;
+  padding: 8px 13px;
+  gap:6px;
+  white-space:nowrap;
+  line-height:1.15;
+  flex: 0 0 auto;
+  font-size:.74rem;
+  box-shadow:0 3px 9px rgba(29,6,30,.2);
+}
+.v12-best-heart { top:7px; right:6px; z-index:5; width:31px; height:31px; display:grid; place-items:center; }
+/* Decorative SVGs belong to their own sections and never sit above CTA buttons. */
+.v12-transition {
+  position:absolute;
+  left:0;right:0;bottom:-1px;
+  width:100%;
+  height:clamp(66px,6.8vw,106px)!important;
+  pointer-events:none;
+  z-index:4!important;
+  overflow:hidden;
+}
+.v13-wave-svg { display:block; width:100%; height:100%; overflow:visible; }
+.v13-wave-svg path { vector-effect:non-scaling-stroke; }
+.v12-catalog { padding-top:54px!important; padding-bottom:128px; }
+.v12-catalog .v12-content { isolation:isolate; }
+.v12-grid { grid-template-columns:repeat(4,minmax(0,1fr)); align-items:stretch; gap:18px; }
+.v12-product { min-width:0; border-radius:17px; }
+.v12-product-image { width:100%; aspect-ratio:1/1!important; }
+.v12-product-image img { object-fit:cover; width:100%; height:100%; }
+.v12-product-info { min-height:105px; padding:13px 14px 13px; }
+.v12-product-name { min-height:2.4em; line-height:1.21; }
+.v12-product-bottom { margin-top:auto; min-height:34px; align-items:center; }
+.v12-product-bottom strong { line-height:1.2; }
+.v12-mini-bag { width:35px; height:35px; flex:0 0 35px; }
+.v12-filters { min-width:0; }
+.v12-filter { line-height:1.2; }
+/* The old overlapping wave hid the about CTA. Ensure dedicated safe space. */
+.v12-about { min-height:460px; }
+.v12-about-inner { min-height:460px; padding:40px 0 124px; }
+.v12-about-copy { position:relative; z-index:5; }
+.v12-about-cta { position:relative; z-index:9; }
+.v12-signature { bottom:116px; }
+.v12-transition--to-courses { z-index:7!important; }
+.v12-courses { padding-top:52px!important; padding-bottom:58px; }
+.v12-course-grid { align-items:stretch; gap:20px; }
+.v12-course { height:100%; min-width:0; }
+.v12-course-body { min-height:162px; }
+.v12-course-body h3 { min-height:1.1em; }
+.v12-course-link { flex:0 0 auto; white-space:nowrap; }
+.v12-order { padding:30px 0 133px; }
+.v12-steps { gap:18px; }
+.v12-step { min-height:142px; padding:20px 17px; overflow:visible; }
+/* The old arrows extended outside each card, artificially creating overlapping boxes.
+   Numbered steps are more robust across widths without those out-of-bounds glyphs. */
+.v12-step::after { content:none!important; }
+.v12-order-button { position:relative;z-index:2; }
+.v12-footer { padding:30px 0 32px; }
+.v12-footer-inner { align-items:start; }
+.v12-footer-legal { justify-content:flex-start; row-gap:8px; }
+.v12-footer-social a,.v12-footer-legal a { line-height:1.45; }
+/* Desktop + laptop intermediary widths: three tiny cards caused truncated names and buttons. */
+@media (min-width:851px) and (max-width:1199px) {
+  .v13-hero .v13-copy { width:34%; }
+  .v13-copy p { max-width:100%; }
+  .v12-best { padding-top:50px!important; }
+  .v12-best-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .v12-bestseller { min-height:230px; }
+  .v12-bestseller:last-child { grid-column:1 / -1; justify-self:center; width:calc((100% - 20px)/2); }
+  .v12-best-copy { padding:23px 16px 17px; }
+  .v12-best-copy h3 { font-size:1.28rem; }
+  .v12-best-copy p { font-size:.81rem; }
+  .v12-catalog { padding-top:46px!important; }
+  .v12-course-body { padding-inline:16px; }
+}
+@media (min-width:1200px) and (max-width:1450px) {
+  .v12-best-copy { padding:20px 14px 17px; }
+  .v12-best-copy h3 { font-size:clamp(1.11rem,1.4vw,1.34rem); }
+  .v12-best-copy p { font-size:.78rem; }
+}
+@media (max-width:850px) {
+  /* The approved mobile illustration already includes the 'Бестселлеры' heading. */
+  .v13-hero .v13-artwork::after { display:none; }
+  .v12-best { padding:12px 0 80px!important; }
+  .v12-best-grid { grid-template-columns:1fr; gap:12px; }
+  .v12-bestseller { width:100%; min-height:163px; grid-template-columns:minmax(0,40%) minmax(0,60%); }
+  .v12-best-copy { padding:17px 15px 14px; }
+  .v12-best-copy h3 { font-size:clamp(1.06rem,2.5vw,1.32rem); }
+  .v12-best-copy p { font-size:.79rem; margin-bottom:8px; }
+  .v12-best-copy b { font-size:1rem; margin-top:auto; margin-bottom:8px; }
+  .v12-best .v12-gold-cta { min-height:32px; font-size:.74rem; }
+  .v12-transition { height:68px!important; }
+  .v12-catalog { padding-top:39px!important; padding-bottom:104px; }
+  .v12-about { min-height:510px; }
+  .v12-about-inner { min-height:510px; padding:28px 0 122px; }
+  .v12-signature { bottom:110px; }
+  .v12-courses { padding-top:40px!important; }
+  .v12-order { padding:25px 0 112px; }
+  .v12-order .v12-steps { gap:14px; }
+  .v12-step { padding:17px 10px; }
+}
+@media (max-width:700px) {
+  .v12-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:11px; }
+  .v12-filters { margin-right:0; width:100%; max-width:100%; }
+  .v12-filter-row { min-width:0; }
+  .v12-product-info { min-height:100px; padding:11px; }
+  .v12-product-name { min-height:2.4em; font-size:.87rem; }
+  .v12-product-bottom { min-height:33px; }
+  .v12-product-bottom strong { font-size:.88rem; }
+  .v12-course-grid { grid-template-columns:1fr; gap:13px; }
+  .v12-course { display:grid; grid-template-columns:minmax(0,40%) minmax(0,60%); min-height:170px; }
+  .v12-course-media { min-height:170px; height:100%; }
+  .v12-course-body { min-height:0; padding:15px; }
+  .v12-course-body h3 { min-height:0; line-height:1.18; }
+  .v12-order .v12-title { margin-bottom:22px; }
+  .v12-step { min-height:150px; }
+}
+@media (max-width:420px) {
+  .v12-best { padding:11px 0 70px!important; }
+  .v12-best-grid { gap:10px; }
+  .v12-bestseller { min-height:167px; grid-template-columns:minmax(0,39%) minmax(0,61%); }
+  .v12-best-copy { padding:13px 10px 11px; }
+  .v12-best-copy h3 { font-size:1.00rem; margin-bottom:5px; }
+  .v12-best-copy p { font-size:.69rem; line-height:1.27; margin-bottom:7px; }
+  .v12-best-copy b { font-size:.92rem; margin-bottom:7px; }
+  .v12-best .v12-gold-cta { min-height:29px; font-size:.65rem; padding:6px 9px; }
+  .v12-transition { height:58px!important; }
+  .v12-product-info { padding:10px 9px 11px; }
+  .v12-product-name { font-size:.83rem; }
+  .v12-product-bottom strong { font-size:.82rem; }
+  .v12-mini-bag { width:31px; height:31px; flex-basis:31px; }
+  .v12-about { min-height:530px; }
+  .v12-about-inner { min-height:530px; padding-bottom:124px; }
+  .v12-about-cta { max-width:100%; white-space:normal; text-align:center; }
+  .v12-course-body { padding:12px; }
+  .v12-course-link { padding:7px 12px; }
+  .v12-order { padding-bottom:102px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .v12-best .v12-gold-cta, .v12-bestseller, .v12-product { transition:none!important; }
+}
+/* Overlays must always sit ABOVE the sticky header (z-index:110).
+   Previously the header intercepted the cart's close button on mobile. */
+#scrim { z-index:200; }
+#cart-drawer { z-index:201; }
+#success-scrim { z-index:210; }
+#cart-success { z-index:211; }
+#checkout-scrim { z-index:220; }
+#checkout-dialog { z-index:221; }
+#config-scrim { z-index:230; }
+#product-config { z-index:231; }
+/* Keep scrolling inside dialogs and leave their dismiss buttons unobstructed. */
+#cart-drawer,#cart-success,#checkout-dialog,#product-config { overscroll-behavior:contain; }
+#cart-drawer .drawer-top { position:relative;z-index:1; }
+/* Keep the mobile CTA clear of Olga's face in the portrait underneath. */
+@media (max-width:700px){
+  .v12-about-photo { top:30%; height:70%; }
+}
