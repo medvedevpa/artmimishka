@@ -12,6 +12,10 @@
   ];
   const AROMA_LATER = 'Подобрать при оформлении';
   // A single editable catalog shared by the storefront, cart and product pages.
+  const PACKAGING = Array.isArray(window.ART_MIMISHKA_PACKAGING) ? window.ART_MIMISHKA_PACKAGING.filter(x=>x.active!==false) : [];
+  const COURSES = Array.isArray(window.ART_MIMISHKA_COURSES) ? window.ART_MIMISHKA_COURSES.filter(x=>x.active!==false) : [];
+  let chosenPackaging = 'standard';
+  try {chosenPackaging=sessionStorage.getItem('artmimishka_packaging')||'standard'} catch(_) {}
   const CATALOG = Array.isArray(window.ART_MIMISHKA_CATALOG) ? window.ART_MIMISHKA_CATALOG.filter(p => p && p.active !== false && p.id) : [];
   const PRODUCTS = Object.fromEntries(CATALOG.map(p => [p.id, {
     name: p.title || p.name || 'Изделие',
@@ -35,7 +39,7 @@
     'checkout-dialog': 'checkout-scrim',
     'product-config': 'config-scrim'
   };
-  const prefix = /\/products\//.test(location.pathname) ? '../../' :
+  const prefix = /\/(products|courses)\//.test(location.pathname) ? '../../' :
     /\/(catalog|privacy|oferta|nalichie|kukolkahanna|volshebnyefei|rozhdestvenskayaprincessa)\//.test(location.pathname) ? '../' : '';
   const rub = n => n == null ? 'Цена уточняется' : new Intl.NumberFormat('ru-RU').format(n) + ' ₽';
   const htmlEscape = value => String(value ?? '').replace(/[&<>"']/g, x => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
@@ -79,6 +83,15 @@
       return `<article class="a15-bestseller"><a class="a15-bestseller-img" href="${href}"><img src="${src}" alt="${title}" loading="eager"></a><div class="a15-bestseller-copy"><a class="a15-bestseller-name" href="${href}">${title}</a><p>${htmlEscape(p.description||'Изделие ручной работы')}</p><div class="a15-bestseller-price">${rub(PRODUCTS[p.id].price)}</div><button type="button" class="a15-best-buy" data-add-cart="${htmlEscape(p.id)}">В корзину <span>›</span></button></div><button type="button" class="a15-best-heart" data-favorite="${htmlEscape(p.id)}" aria-label="В избранное: ${title}" aria-pressed="false">♡</button></article>`;
     }).join('');
   }
+  function renderCourses(){
+    const grid=$('.a15-courses-grid');if(!grid || !COURSES.length)return;
+    grid.innerHTML=COURSES.slice().sort((a,b)=>(a.rank||99)-(b.rank||99)).map(p=>{
+      const id=encodeURIComponent(p.id),old=['volshebnyefei','rozhdestvenskayaprincessa'].includes(p.id);
+      const href=old?p.id+'/index.html':'courses/view/index.html?id='+id;
+      const image=productImage(p);return `<article class="a15-course"><a class="a15-course-photo" href="${href}"><img src="${htmlEscape(image)}" alt="${htmlEscape(p.title)}" loading="lazy"></a><div><h3>${htmlEscape(p.title)}</h3><p>${htmlEscape(p.description||'Авторский мастер-класс')}</p><a href="${href}">Подробнее <span>›</span></a></div></article>`;
+    }).join('');
+  }
+  renderCourses();
   function refreshProductDetail() {
     const slug = /\/products\/([^/]+)\//.exec(location.pathname)?.[1];
     const id = slug === 'view' ? new URLSearchParams(location.search).get('id') : slug;
@@ -100,6 +113,16 @@
     if (story){const ps=$$('p',story);if(ps[0])ps[0].textContent=p.long||p.description||'';if(ps[1])ps[1].remove();}
     $$('[data-add-cart]', $('.detail-actions')||document).forEach(el=>el.dataset.addCart=id);
   }
+  function refreshCourseDetail(){
+    if(!/\/courses\/view\//.test(location.pathname))return;
+    const course=COURSES.find(p=>p.id===new URLSearchParams(location.search).get('id'));
+    const main=$('#course-content');if(!main)return;
+    if(!course){main.textContent='Мастер-класс не найден';return}
+    document.title=course.title+' — ART MIMISHKA';
+    const h=$('h1',main),img=$('img',main),d=$('.course-description',main),pr=$('.course-price',main);
+    if(h)h.textContent=course.title;if(img){img.src=productImage(course);img.alt=course.title}if(d)d.textContent=course.long||course.description||'';if(pr)pr.textContent=course.price_rub==null?'Стоимость уточняется':rub(course.price_rub);
+  }
+  refreshCourseDetail();
   renderCatalog();
   renderBestsellers();
   refreshProductDetail();
@@ -203,8 +226,16 @@
     const label = $('#success-product');
     if (label) label.textContent = name + ' — ' + rub(unitPrice(row));
     renderSuccessSummary();
-    displayModal('cart-success', '[data-checkout]');
+    if (matchMedia('(max-width: 700px)').matches) showMobileToast();
+    else displayModal('cart-success', '[data-checkout]');
     track('add_to_cart', {product: id, variant: row.variant, scent: row.scent, price: unitPrice(row)});
+  }
+  let toastTimeout;
+  function showMobileToast(){
+    let toast=$('#a18-toast');
+    if(!toast){toast=node('div','a18-toast');toast.id='a18-toast';toast.setAttribute('role','status');toast.setAttribute('aria-live','polite');toast.innerHTML='<span class="a18-toast-mark" aria-hidden="true">✓</span><div>Добавлено в корзину<small class="a18-toast-count"></small></div><button type="button">Корзина</button>';document.body.append(toast);toast.querySelector('button').addEventListener('click',()=>{toast.hidden=true;openCart()})}
+    toast.querySelector('.a18-toast-count').textContent=count()+' шт. в корзине';
+    toast.hidden=false;clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>toast.hidden=true,3600);
   }
   function renderSuccessSummary(){
     const area=$('#success-items'), total=$('#success-total');
@@ -323,6 +354,11 @@
     if (total) total.textContent = hasUnknown()
       ? (sumKnown() ? `Известная сумма: ${rub(sumKnown())} · стоимость одной из позиций уточняется` : 'Стоимость уточняется в мастерской')
       : `Предварительная сумма: ${rub(sumKnown())}`;
+    let packing=$('#a18-packaging');
+    if(!packing && PACKAGING.length){const bottom=$('.drawer-bottom',$('#cart-drawer'));packing=node('div','a18-packing');packing.id='a18-packaging';const title=node('label','','Упаковка заказа');title.htmlFor='a18-packing-choice';const sel=node('select');sel.id='a18-packing-choice';for(const p of PACKAGING){const opt=node('option','',p.title+(p.price_rub==null?' · цена уточняется':p.price_rub>0?' · +'+rub(p.price_rub):' · бесплатно'));opt.value=p.id;sel.append(opt)}sel.value=PACKAGING.some(x=>x.id===chosenPackaging)?chosenPackaging:PACKAGING[0].id;sel.addEventListener('change',()=>{chosenPackaging=sel.value;try{sessionStorage.setItem('artmimishka_packaging',chosenPackaging)}catch(_){}renderCart()});packing.append(title,sel);const preview=node('div','a18-packing-preview');preview.id='a18-packing-preview';packing.append(preview);bottom?.prepend(packing)}
+    const pack=PACKAGING.find(p=>p.id===chosenPackaging);
+    const packPreview=$('#a18-packing-preview');if(packPreview&&pack){packPreview.replaceChildren();if(pack.image){const photo=node('img');photo.alt='';photo.src=productImage(pack);packPreview.append(photo)}packPreview.append(node('small','',pack.description||''))}
+    if(total && pack && totalItems && !hasUnknown() && pack.price_rub!=null)total.textContent=`Предварительная сумма: ${rub(sumKnown()+Number(pack.price_rub||0))} (с упаковкой)`;
     const check = $('[data-checkout]', $('#cart-drawer'));
     if (check) check.disabled = totalItems === 0;
   }
@@ -341,7 +377,9 @@
       message.push(`   Сумма: ${price == null ? 'уточняется' : rub(price * r.quantity)}`);
       message.push('');
     });
-    message.push(hasUnknown() ? (sumKnown() ? `Известная часть суммы: ${rub(sumKnown())}` : 'Итоговая сумма: уточняется') : `Предварительная сумма: ${rub(sumKnown())}`);
+    const pack=PACKAGING.find(p=>p.id===chosenPackaging);
+    if(pack){message.push('Упаковка: '+pack.title+(pack.price_rub==null?' (стоимость уточняется)':pack.price_rub>0?' (+'+rub(pack.price_rub)+')':' (без доплаты)'));if(pack.description)message.push('   '+pack.description);message.push('')}
+    message.push(hasUnknown() ? (sumKnown() ? `Известная часть суммы: ${rub(sumKnown())}` : 'Итоговая сумма: уточняется') : pack?.price_rub==null ? `Предварительная сумма за изделия: ${rub(sumKnown())} · упаковка уточняется` : `Предварительная сумма с упаковкой: ${rub(sumKnown()+Number(pack?.price_rub||0))}`);
     message.push('');
     if (cart.some(r => r.scent && r.scent !== AROMA_LATER)) {
       message.push('Пожалуйста, подтвердите наличие выбранных ароматов. Если какой-то закончился, предложите замену.');
@@ -354,6 +392,17 @@
   function openCheckout() {
     if (!count()) { openCart(); return; }
     previousFocus = document.activeElement;
+    // Packaging can also be chosen when checkout opens directly from the success dialog.
+    let checkoutPacking=$('#a18-checkout-packing');
+    if(!checkoutPacking && PACKAGING.length){
+      const checkout=$('#checkout-dialog');
+      const label=node('label','a18-checkout-pack-label','Упаковка заказа');label.htmlFor='a18-checkout-packing';
+      checkoutPacking=node('select','a18-checkout-packing');checkoutPacking.id='a18-checkout-packing';
+      for(const p of PACKAGING){const option=node('option','',p.title+(p.price_rub==null?' · цена уточняется':p.price_rub>0?' · +'+rub(p.price_rub):' · бесплатно'));option.value=p.id;checkoutPacking.append(option)}
+      checkoutPacking.addEventListener('change',()=>{chosenPackaging=checkoutPacking.value;try{sessionStorage.setItem('artmimishka_packaging',chosenPackaging)}catch(_){}const drawerSelect=$('#a18-packing-choice');if(drawerSelect)drawerSelect.value=chosenPackaging;const text=$('#checkout-text');if(text)text.value=messageText()});
+      checkout?.querySelector('textarea')?.before(label,checkoutPacking);
+    }
+    if(checkoutPacking)checkoutPacking.value=chosenPackaging;
     const field = $('#checkout-text');
     if (field) field.value = messageText();
     const status = $('#copy-status');
