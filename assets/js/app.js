@@ -80,7 +80,7 @@
     const ordered=[...featured,...CATALOG.filter(p=>!p.featured).sort((a,b)=>(a.rank??999)-(b.rank??999))];
     grid.innerHTML=ordered.slice(0,3).map(p=>{
       const title=htmlEscape(p.title),href=productHref(p),src=htmlEscape(productImage(p));
-      return `<article class="a15-bestseller"><a class="a15-bestseller-img" href="${href}"><img src="${src}" alt="${title}" loading="eager"></a><div class="a15-bestseller-copy"><a class="a15-bestseller-name" href="${href}">${title}</a><p>${htmlEscape(p.description||'Изделие ручной работы')}</p><div class="a15-bestseller-price">${rub(PRODUCTS[p.id].price)}</div><button type="button" class="a15-best-buy" data-add-cart="${htmlEscape(p.id)}">В корзину <span>›</span></button></div><button type="button" class="a15-best-heart" data-favorite="${htmlEscape(p.id)}" aria-label="В избранное: ${title}" aria-pressed="false">♡</button></article>`;
+      return `<article class="a15-bestseller"><a class="a15-bestseller-img" href="${href}"><img src="${src}" alt="${title}" loading="eager"></a><div class="a15-bestseller-copy"><a class="a15-bestseller-name" href="${href}">${title}</a><div class="a15-bestseller-price">${rub(PRODUCTS[p.id].price)}</div><button type="button" class="a15-best-buy" data-add-cart="${htmlEscape(p.id)}">В корзину <span aria-hidden="true">✧</span></button></div><button type="button" class="a15-best-heart" data-favorite="${htmlEscape(p.id)}" aria-label="В избранное: ${title}" aria-pressed="false">♡</button></article>`;
     }).join('');
   }
   function renderCourses(){
@@ -357,7 +357,13 @@
     let packing=$('#a18-packaging');
     if(!packing && PACKAGING.length){const bottom=$('.drawer-bottom',$('#cart-drawer'));packing=node('div','a18-packing');packing.id='a18-packaging';const title=node('label','','Упаковка заказа');title.htmlFor='a18-packing-choice';const sel=node('select');sel.id='a18-packing-choice';for(const p of PACKAGING){const opt=node('option','',p.title+(p.price_rub==null?' · цена уточняется':p.price_rub>0?' · +'+rub(p.price_rub):' · бесплатно'));opt.value=p.id;sel.append(opt)}sel.value=PACKAGING.some(x=>x.id===chosenPackaging)?chosenPackaging:PACKAGING[0].id;sel.addEventListener('change',()=>{chosenPackaging=sel.value;try{sessionStorage.setItem('artmimishka_packaging',chosenPackaging)}catch(_){}renderCart()});packing.append(title,sel);const preview=node('div','a18-packing-preview');preview.id='a18-packing-preview';packing.append(preview);bottom?.prepend(packing)}
     const pack=PACKAGING.find(p=>p.id===chosenPackaging);
-    const packPreview=$('#a18-packing-preview');if(packPreview&&pack){packPreview.replaceChildren();if(pack.image){const photo=node('img');photo.alt='';photo.src=productImage(pack);packPreview.append(photo)}packPreview.append(node('small','',pack.description||''))}
+    const packPreview=$('#a18-packing-preview');if(packPreview&&pack){packPreview.replaceChildren();if(pack.image){const photo=node('img');photo.alt='';photo.src=productImage(pack);packPreview.append(photo)}packPreview.append(node('small','',pack.description||''));
+      const details=node('details','a19-pack-details');const summary=node('summary','','Подробнее об упаковке');details.append(summary);
+      details.append(node('p','',pack.long_description||pack.description||'Подробности можно уточнить перед заказом.'));
+      if(Array.isArray(pack.gallery))for(const src of pack.gallery){if(src){const pic=node('img','a19-pack-gallery');pic.alt='Вариант упаковки';pic.src=productImage({image:src});pic.loading='lazy';details.append(pic)}}
+      if(pack.video){const video=node('video','a19-pack-video');video.controls=true;video.preload='metadata';video.playsInline=true;video.setAttribute('aria-label','Видео упаковки');video.src=/^(data:|https?:|blob:)/.test(pack.video)?pack.video:prefix+pack.video;details.append(video)}
+      packPreview.after(details);
+      const existing=$$('.a19-pack-details',packing).filter(x=>x!==details);existing.forEach(el=>el.remove());}
     if(total && pack && totalItems && !hasUnknown() && pack.price_rub!=null)total.textContent=`Предварительная сумма: ${rub(sumKnown()+Number(pack.price_rub||0))} (с упаковкой)`;
     const check = $('[data-checkout]', $('#cart-drawer'));
     if (check) check.disabled = totalItems === 0;

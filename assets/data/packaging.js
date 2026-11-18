@@ -3,6 +3,9 @@ window.ART_MIMISHKA_PACKAGING = [
     "id": "standard",
     "title": "Стандартная упаковка",
     "description": "Бережная упаковка изделия для доставки.",
+    "long_description": "Изделие аккуратно защищается для транспортировки. Точный способ упаковки зависит от формы и хрупкости заказа.",
+    "gallery": [],
+    "video": "",
     "price_rub": 0,
     "active": true,
     "image": "packing-standard.webp"
@@ -11,6 +14,9 @@ window.ART_MIMISHKA_PACKAGING = [
     "id": "gift",
     "title": "Подарочная упаковка",
     "description": "Нарядное оформление с лентой и декоративными деталями. Цена уточняется при заказе.",
+    "long_description": "Подарочная упаковка подбирается с учётом изделия. Можно согласовать цвет ленты и оформление в переписке.",
+    "gallery": [],
+    "video": "",
     "price_rub": null,
     "active": true,
     "image": "packing-gift.webp"
@@ -19,6 +25,9 @@ window.ART_MIMISHKA_PACKAGING = [
     "id": "personal",
     "title": "Индивидуальная упаковка",
     "description": "Оформление под повод, пожелания и цветовую гамму. Детали и цена по согласованию.",
+    "long_description": "Индивидуальное оформление обсуждается с мастерской: повод, адресат, оттенки, дополнительные пожелания. Стоимость согласуется отдельно.",
+    "gallery": [],
+    "video": "",
     "price_rub": null,
     "active": true,
     "image": ""

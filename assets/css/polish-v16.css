@@ -195,3 +195,39 @@
 .a18-packing-preview{display:flex;gap:10px;align-items:center;color:#775e67;font:12px/1.4 Georgia,serif}.a18-packing-preview img{width:62px;height:62px;object-fit:cover;border-radius:9px;border:1px solid #e4c9aa}.a18-packing-preview small{font-size:12px}
 
 .a18-checkout-pack-label{display:block;margin:14px 0 6px;font-size:14px;font-weight:700;color:#5a2b42}.a18-checkout-packing{display:block;width:100%;box-sizing:border-box;border:1px solid #dfb98a;border-radius:10px;background:#fff9ef;color:#4c263a;padding:11px 12px;margin-bottom:12px;font-size:14px}
+
+/* ART MIMISHKA v19 – targeted refinements */
+.a15-logo .a18-logo{width:33px;height:39px;object-fit:contain;filter:none!important}
+/* Bestseller cards: full-width square photo, short name, coherent rhythm */
+.a15-best-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:20px!important;align-items:stretch}
+.a15-bestseller{display:flex!important;flex-direction:column!important;height:100%!important;min-height:0!important;grid-template-columns:none!important;overflow:hidden;border-radius:19px!important;border:1px solid rgba(231,192,140,.47)!important;background:linear-gradient(168deg,#52243d,#311126)!important;box-shadow:0 14px 35px rgba(17,4,14,.16)!important}
+.a15-bestseller-img{position:relative;display:block;width:100%!important;min-height:0!important;height:auto!important;aspect-ratio:1/1;overflow:hidden;flex:none}
+.a15-bestseller-img img{width:100%!important;height:100%!important;object-fit:cover!important;display:block;transition:transform .35s ease}
+.a15-bestseller:hover .a15-bestseller-img img{transform:scale(1.035)}
+.a15-bestseller-copy{display:flex!important;flex:1;flex-direction:column;align-items:stretch;height:auto!important;gap:13px!important;padding:17px 18px 19px!important}
+.a15-bestseller-copy p{display:none!important}
+.a15-bestseller-name{margin:0!important;max-width:none!important;font-size:clamp(18px,1.7vw,23px)!important;line-height:1.24!important;min-height:2.45em;overflow-wrap:anywhere}
+.a15-bestseller-price{margin-top:auto!important;padding-top:10px!important;font-size:clamp(19px,2vw,25px)!important;line-height:1.2!important}
+.a15-best-buy{align-self:flex-start;margin-top:0!important;padding:10px 18px!important;border-radius:30px;border:1px solid #efcf9a;background:linear-gradient(120deg,#ffecc5 0%,#e9b877 60%,#d89b5c 100%)!important;color:#4c2338!important;box-shadow:none!important;font-size:13px!important;white-space:nowrap}
+.a15-best-heart{z-index:3}
+/* Dark plum fade above Olga, never a bright cream stripe */
+.a15-about::before{background:linear-gradient(to bottom,#321126 0%,rgba(52,20,43,.86) 27%,rgba(52,20,43,0) 100%)!important;height:130px!important}
+.a15-about-photo::before{background:linear-gradient(to bottom,#341329 0%,rgba(52,20,43,.83) 13%,transparent 33%,transparent 74%,#341329 100%),linear-gradient(to right,#341329 0%,rgba(52,20,43,.61) 27%,transparent 63%)!important}
+.a15-about-values span b,.a15-step b{width:34px!important;height:34px!important;display:inline-flex!important;align-items:center;justify-content:center;color:#e8bb78!important;font-size:25px!important;line-height:1!important;background:none!important;box-shadow:none!important;border:0!important}
+.a15-about-values svg,.a15-step svg{display:block;width:28px!important;height:28px!important;fill:none!important;stroke:#e8bb78!important;stroke-width:1.65!important;stroke-linecap:round;stroke-linejoin:round}
+.a15-order-button{box-shadow:none!important}
+/* Keep checkout action on screen while the cart drawer is open */
+#cart-drawer:not([hidden]) .drawer-bottom [data-checkout]{position:fixed!important;bottom:calc(16px + env(safe-area-inset-bottom,0px));right:20px;left:auto;width:min(300px,calc(100vw - 40px));z-index:105!important;box-shadow:0 9px 30px rgba(34,10,28,.22)}
+#cart-drawer .drawer-bottom{padding-bottom:115px!important}
+.a18-packing-preview{flex-wrap:wrap}.a19-pack-details{width:100%;border:1px solid #ecd5bc;border-radius:12px;padding:10px 12px;background:#fff8ed;margin-top:7px;color:#5e3850;box-sizing:border-box}.a19-pack-details summary{cursor:pointer;font-weight:700;list-style:revert}.a19-pack-details p{font-size:13px;line-height:1.5;margin:10px 0}.a19-pack-video{display:block;width:100%;max-height:240px;border-radius:10px;margin:10px 0}.a19-pack-gallery{max-width:120px;max-height:130px;object-fit:cover;border-radius:9px;margin:5px}
+@media(max-width:700px){
+.a15-best-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:11px!important}
+.a15-bestseller-copy{padding:12px!important;gap:9px!important}
+.a15-bestseller-name{font-size:clamp(13px,3.5vw,17px)!important;min-height:3.8em}
+.a15-bestseller-price{font-size:17px!important}
+.a15-best-buy{font-size:11px!important;padding:9px 12px!important}
+.a15-about::before{height:100px!important}
+.a15-about-photo::before{background:linear-gradient(to bottom,#341329 0%,rgba(52,20,43,.9) 17%,rgba(52,20,43,.64) 42%,rgba(52,20,43,.25) 74%,#341329 100%)!important}
+#cart-drawer:not([hidden]) .drawer-bottom [data-checkout]{left:14px!important;right:14px!important;width:calc(100vw - 28px)!important;max-width:none!important;bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+}
+@media(max-width:410px){.a15-best-grid{grid-template-columns:1fr!important}.a15-bestseller-name{font-size:18px!important;min-height:0}.a15-bestseller-img{aspect-ratio:1.18/1}}
