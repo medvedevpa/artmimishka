@@ -231,3 +231,52 @@
 #cart-drawer:not([hidden]) .drawer-bottom [data-checkout]{left:14px!important;right:14px!important;width:calc(100vw - 28px)!important;max-width:none!important;bottom:calc(10px + env(safe-area-inset-bottom,0px))}
 }
 @media(max-width:410px){.a15-best-grid{grid-template-columns:1fr!important}.a15-bestseller-name{font-size:18px!important;min-height:0}.a15-bestseller-img{aspect-ratio:1.18/1}}
+
+/* v20: compact editorial bestsellers; three genuinely small cards even on phones. */
+.a15-best .a15-wrap{max-width:1120px}
+.a15-best-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:clamp(9px,1.65vw,18px)!important}
+.a15-bestseller{min-width:0!important;min-height:0!important;height:100%!important;border-radius:17px!important;border:1px solid rgba(238,199,145,.36)!important;background:linear-gradient(155deg,#542a42 0%,#301426 100%)!important;box-shadow:0 10px 30px rgba(17,4,14,.16)!important;transition:transform .2s,box-shadow .2s,border-color .2s!important}
+.a15-bestseller:hover{transform:translateY(-3px);box-shadow:0 17px 35px rgba(17,4,14,.25)!important;border-color:rgba(245,209,161,.65)!important}
+.a15-bestseller-img{aspect-ratio:1/1!important;width:100%!important;min-height:0!important;height:auto!important;flex:0 0 auto!important}
+.a15-bestseller-copy{min-height:0!important;padding:12px 13px 14px!important;gap:8px!important;align-items:stretch!important}
+.a15-bestseller-name{font:500 clamp(14px,1.35vw,18px)/1.27 Georgia,serif!important;letter-spacing:0!important;min-height:2.5em!important;max-width:100%!important;display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden!important}
+.a15-bestseller-price{margin-top:auto!important;padding:4px 0 0!important;font:700 clamp(16px,1.65vw,21px)/1.2 Georgia,serif!important;color:#f8dfb6!important}
+.a15-best-buy{width:100%!important;justify-content:center!important;min-height:36px!important;padding:8px 12px!important;font:700 12px/1.2 system-ui,sans-serif!important;letter-spacing:.01em!important;border-radius:11px!important}
+.a15-best-heart{top:8px!important;right:8px!important;width:29px!important;height:29px!important;border-radius:50%!important;background:rgba(39,17,31,.72)!important;backdrop-filter:blur(6px)}
+/* Blend cream catalog into the plum founder panel without a visible section seam. */
+.a15-catalog{position:relative!important;isolation:isolate;padding-bottom:175px!important}
+.a15-catalog>.a15-wave{display:none!important}
+.a15-catalog::after{content:'';position:absolute;z-index:1;inset:auto 0 -1px;height:175px;pointer-events:none;background:linear-gradient(to bottom,rgba(53,20,40,0) 0%,rgba(53,20,40,.07) 12%,rgba(53,20,40,.38) 46%,rgba(53,20,40,.78) 78%,#351428 100%)}
+.a15-about{margin-top:-1px!important;background:#351428!important}
+.a15-about::before{height:190px!important;background:linear-gradient(to bottom,#351428 0%,rgba(53,20,40,.95) 15%,rgba(53,20,40,.66) 47%,rgba(53,20,40,0) 100%)!important}
+.a15-about-photo::before{background:linear-gradient(to bottom,#351428 0%,rgba(53,20,40,.85) 12%,rgba(53,20,40,.28) 39%,transparent 57%,rgba(53,20,40,.12) 77%,#351428 100%),linear-gradient(to right,#351428 0%,rgba(53,20,40,.65) 25%,transparent 70%)!important}
+@media(max-width:700px){
+ .a15-best-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+ .a15-best .a15-wrap{padding-left:10px!important;padding-right:10px!important}
+ .a15-bestseller{border-radius:12px!important}
+ .a15-bestseller-copy{padding:8px 6px 9px!important;gap:5px!important}
+ .a15-bestseller-name{font:500 clamp(10px,2.7vw,13px)/1.22 Georgia,serif!important;min-height:3.65em!important;-webkit-line-clamp:3}
+ .a15-bestseller-price{font:700 clamp(11px,3vw,15px)/1.18 Georgia,serif!important;padding-top:2px!important}
+ .a15-best-buy{font:700 clamp(9px,2.3vw,11px)/1.1 system-ui,sans-serif!important;min-height:29px!important;padding:6px 2px!important;border-radius:8px!important;gap:3px!important}
+ .a15-best-buy span::before{width:12px!important;height:12px!important}
+ .a15-best-heart{top:5px!important;right:5px!important;width:23px!important;height:23px!important}
+ .a15-best-heart svg{width:14px!important;height:14px!important}
+ .a15-catalog{padding-bottom:128px!important}
+ .a15-catalog::after{height:130px}
+ .a15-about::before{height:165px!important}
+ .a15-about-photo::before{background:linear-gradient(to bottom,#351428 0%,rgba(53,20,40,.93) 14%,rgba(53,20,40,.65) 39%,rgba(53,20,40,.25) 69%,#351428 100%)!important}
+}
+@media(max-width:410px){
+ .a15-best-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}
+ .a15-bestseller-img{aspect-ratio:1/1!important}
+ .a15-bestseller-name{font-size:10px!important;min-height:3.65em!important}
+ .a15-bestseller-copy{padding:7px 5px 8px!important;gap:5px!important}
+ .a15-best-buy{font-size:9px!important;padding:5px 1px!important;min-height:27px!important}
+}
+
+/* Product page: extra photographs and video from Olga's editor. */
+.a20-gallery-strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:9px;margin-top:12px}
+.a20-gallery-thumb{padding:0;cursor:pointer;aspect-ratio:1;overflow:hidden;border:2px solid transparent;border-radius:10px;background:#f5e7db}
+.a20-gallery-thumb.active,.a20-gallery-thumb:focus-visible{border-color:#b88b59;outline-offset:2px}
+.a20-gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.a20-detail-video{display:block;width:100%;max-height:430px;margin-top:15px;border-radius:12px;background:#231526}

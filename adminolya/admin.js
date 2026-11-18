@@ -23,11 +23,11 @@
     const draft = JSON.parse(localStorage.getItem(KEY) || 'null');
     list = Array.isArray(draft) && draft.every(p=>p && typeof p.id==='string') ? draft : clone(published);
   } catch (_) {list=clone(published)}
-  let current=null; let imageValue=''; let previousId=null;
+  let current=null; let imageValue=''; let previousId=null; let extraPhotos=[], productVideo='';
   const readDraft=(key,baseline)=>{try {const v=JSON.parse(localStorage.getItem(key)||'null');return Array.isArray(v)?v:clone(baseline)}catch(_){return clone(baseline)}};
   let courses=readDraft(COURSE_KEY,publishedCourses);
   let packaging=readDraft(PACK_KEY,publishedPackaging);
-  let mode='products';let currentPack=null,packPhoto='',packVideo='';
+  let mode='products';let currentPack=null,packPhoto='',packVideo='',packGalleryFiles=[];
   const activeList=()=>mode==='courses'?courses:list;
   function saveExtra(){try{localStorage.setItem(COURSE_KEY,JSON.stringify(courses));localStorage.setItem(PACK_KEY,JSON.stringify(packaging));status('Черновики сохранены')}catch(_){status('Недостаточно памяти — скачайте резервную копию')}}
   function chooseTab(next){
@@ -40,15 +40,41 @@
   }
   document.querySelectorAll('[data-editor-tab]').forEach(b=>b.addEventListener('click',()=>chooseTab(b.dataset.editorTab)));
   function renderPackaging(){const q=$('search').value.toLowerCase();const matches=packaging.filter(p=>p.title.toLowerCase().includes(q));$('product-count').textContent=`${matches.length} из ${packaging.length} вариантов упаковки`;$('product-list').replaceChildren();matches.forEach(p=>{const b=document.createElement('button');b.type='button';b.className='list-item'+(p.id===currentPack?' active':'');b.textContent=p.title+' · '+rub(p.price_rub);b.addEventListener('click',()=>selectPack(p.id));$('product-list').append(b)})}
-  function selectPack(id){const p=packaging.find(x=>x.id===id);if(!p)return;currentPack=id;$('form-title').textContent='Упаковка · '+p.title;$('pack-title').value=p.title;$('pack-id').value=p.id;$('pack-price').value=p.price_rub??'';$('pack-description').value=p.description||'';$('pack-active').checked=p.active!==false;packPhoto=p.image||'';packVideo=p.video||'';$('pack-long').value=p.long_description||'';$('pack-video').value=/^https?:/.test(packVideo)?packVideo:'';$('pack-gallery').value=(p.gallery||[]).join('\n');$('pack-video-preview').hidden=!packVideo;if(packVideo)$('pack-video-preview').src=/^https?:|^data:/.test(packVideo)?packVideo:'../'+packVideo;$('pack-preview').hidden=!packPhoto;if(packPhoto)$('pack-preview').src=fileImage(packPhoto);renderPackaging()}
-  function addPack(){currentPack=null;packPhoto='';packVideo='';$('pack-video-preview').hidden=true;$('packaging-form').reset();$('pack-preview').hidden=true;$('form-title').textContent='Новая упаковка'}
-  $('packaging-form').addEventListener('submit',e=>{e.preventDefault();const id=$('pack-id').value.trim();if(!id)return;const p={id,title:$('pack-title').value.trim(),price_rub:$('pack-price').value.trim()===''?null:Number($('pack-price').value),description:$('pack-description').value.trim(),long_description:$('pack-long').value.trim(),video:packVideo||$('pack-video').value.trim(),gallery:$('pack-gallery').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),active:$('pack-active').checked,image:packPhoto};if(packaging.some(x=>x.id===id&&x.id!==currentPack)){alert('Такой ID уже существует');return;}const i=packaging.findIndex(x=>x.id===currentPack);if(i<0)packaging.push(p);else packaging[i]=p;currentPack=id;saveExtra();renderPackaging()});
+  function selectPack(id){const p=packaging.find(x=>x.id===id);if(!p)return;currentPack=id;$('form-title').textContent='Упаковка · '+p.title;$('pack-title').value=p.title;$('pack-id').value=p.id;$('pack-price').value=p.price_rub??'';$('pack-description').value=p.description||'';$('pack-active').checked=p.active!==false;packPhoto=p.image||'';packVideo=p.video||'';$('pack-long').value=p.long_description||'';$('pack-video').value=/^https?:/.test(packVideo)?packVideo:'';packGalleryFiles=Array.isArray(p.gallery)?p.gallery.slice():[];$('pack-gallery').value='';renderPackPhotos();$('pack-video-preview').hidden=!packVideo;if(packVideo)$('pack-video-preview').src=/^https?:|^data:/.test(packVideo)?packVideo:'../'+packVideo;$('pack-preview').hidden=!packPhoto;if(packPhoto)$('pack-preview').src=fileImage(packPhoto);renderPackaging();previewPackaging()}
+  function addPack(){currentPack=null;packPhoto='';packVideo='';packGalleryFiles=[];renderPackPhotos();$('pack-video-preview').hidden=true;$('packaging-form').reset();$('pack-preview').hidden=true;$('form-title').textContent='Новая упаковка';previewPackaging()}
+  $('packaging-form').addEventListener('submit',e=>{e.preventDefault();const id=$('pack-id').value.trim();if(!id)return;const p={id,title:$('pack-title').value.trim(),price_rub:$('pack-price').value.trim()===''?null:Number($('pack-price').value),description:$('pack-description').value.trim(),long_description:$('pack-long').value.trim(),video:packVideo||$('pack-video').value.trim(),gallery:[...packGalleryFiles,...$('pack-gallery').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean)],active:$('pack-active').checked,image:packPhoto};if(packaging.some(x=>x.id===id&&x.id!==currentPack)){alert('Такой ID уже существует');return;}const i=packaging.findIndex(x=>x.id===currentPack);if(i<0)packaging.push(p);else packaging[i]=p;currentPack=id;saveExtra();renderPackaging();previewPackaging()});
   $('pack-delete').addEventListener('click',()=>{if(!currentPack||!confirm('Удалить этот вариант упаковки?'))return;packaging=packaging.filter(x=>x.id!==currentPack);saveExtra();if(packaging.length)selectPack(packaging[0].id);else addPack()});
   $('pack-title').addEventListener('blur',()=>{if(!currentPack&&!$('pack-id').value)$('pack-id').value=slugify($('pack-title').value)});
-  $('pack-image').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;packPhoto=await fileToImage(f);$('pack-preview').src=packPhoto;$('pack-preview').hidden=false});
-  $('pack-video').addEventListener('change',e=>{packVideo=e.target.value.trim();$('pack-video-preview').hidden=!packVideo;if(packVideo)$('pack-video-preview').src=packVideo});
-  $('pack-video-clear').addEventListener('click',()=>{packVideo='';$('pack-video').value='';$('pack-video-file').value='';$('pack-video-preview').hidden=true;$('pack-video-preview').removeAttribute('src')});
-  $('pack-video-file').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;if(f.size>1500000){alert('Видео слишком большое для хранения в браузере. Разместите MP4 на GitHub в assets/video/ и укажите ссылку.');e.target.value='';return}packVideo=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(f)});$('pack-video-preview').src=packVideo;$('pack-video-preview').hidden=false});
+  $('pack-image').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;packPhoto=await fileToImage(f);$('pack-preview').src=packPhoto;$('pack-preview').hidden=false;previewPackaging()});
+  $('pack-video').addEventListener('change',e=>{packVideo=e.target.value.trim();$('pack-video-preview').hidden=!packVideo;if(packVideo)$('pack-video-preview').src=packVideo;previewPackaging()});
+  $('pack-video-clear').addEventListener('click',()=>{packVideo='';$('pack-video').value='';$('pack-video-file').value='';$('pack-video-preview').hidden=true;$('pack-video-preview').removeAttribute('src');previewPackaging()});
+  $('pack-video-file').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;if(f.size>1500000){alert('Видео слишком большое для хранения в браузере. Разместите MP4 на GitHub в assets/video/ и укажите ссылку.');e.target.value='';return}packVideo=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(f)});$('pack-video-preview').src=packVideo;$('pack-video-preview').hidden=false;previewPackaging()});
+  function mediaSrc(src){return /^(data:|https?:|blob:)/.test(src||'')?src:/^assets\//.test(src||'')?'../'+src:fileImage(src)}
+  function setPreviewMedia(gallery,video){
+    const holder=$('preview-gallery');holder.replaceChildren();
+    (gallery||[]).filter(Boolean).slice(0,8).forEach(src=>{const img=document.createElement('img');img.src=mediaSrc(src);img.alt='Дополнительная фотография';img.loading='lazy';holder.append(img)});
+    const el=$('preview-video');el.hidden=!video;if(video)el.src=/^(data:|https?:|blob:)/.test(video)?video:'../'+video;else el.removeAttribute('src');
+  }
+  function previewPackaging(){
+    $('preview-heading').textContent='ПРЕДПРОСМОТР УПАКОВКИ';
+    $('preview-image').src=packPhoto?mediaSrc(packPhoto):'../assets/img/placeholder-product.svg';
+    $('preview-title').textContent=$('pack-title').value||'Название упаковки';
+    $('preview-kind').textContent='Упаковка заказа';
+    $('preview-description').textContent=$('pack-description').value||'Описание упаковки появится здесь';
+    $('preview-price').textContent=$('pack-price').value.trim()===''?'Цена по согласованию':Number($('pack-price').value)===0?'Бесплатно':'+'+rub(Number($('pack-price').value));
+    $('preview-badge').hidden=true;
+    setPreviewMedia([...packGalleryFiles,...$('pack-gallery').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean)],packVideo||$('pack-video').value.trim());
+  }
+  function renderPackPhotos(){
+    const list=$('pack-extra-photo-list');list.replaceChildren();
+    packGalleryFiles.forEach((src,i)=>{const tile=document.createElement('div');tile.className='media-thumb';const img=document.createElement('img');img.src=mediaSrc(src);img.alt='Фото упаковки '+(i+1);const btn=document.createElement('button');btn.type='button';btn.textContent='×';btn.setAttribute('aria-label','Удалить фото упаковки');btn.addEventListener('click',()=>{packGalleryFiles.splice(i,1);renderPackPhotos();previewPackaging()});tile.append(img,btn);list.append(tile)});
+  }
+  $('pack-extra-photos').addEventListener('change',async e=>{
+    const files=Array.from(e.target.files||[]);if(files.length+packGalleryFiles.length>6){alert('Максимум 6 дополнительных фото упаковки');e.target.value='';return}
+    for(const file of files){if(!file.type.startsWith('image/'))continue;try{packGalleryFiles.push(await fileToImage(file))}catch(_){alert('Не удалось обработать '+file.name)}}
+    e.target.value='';renderPackPhotos();previewPackaging();
+  });
+  ['pack-title','pack-price','pack-description','pack-gallery'].forEach(id=>$(id).addEventListener('input',previewPackaging));
   async function fileToImage(file){const bitmap=await createImageBitmap(file);const ratio=Math.min(1,1000/Math.max(bitmap.width,bitmap.height));const c=document.createElement('canvas');c.width=Math.round(bitmap.width*ratio);c.height=Math.round(bitmap.height*ratio);c.getContext('2d').drawImage(bitmap,0,0,c.width,c.height);bitmap.close?.();return c.toDataURL('image/webp',.82)}
 
   function status(text){$('status').textContent=text}
@@ -82,7 +108,8 @@
     $('active').checked=p.active!==false;$('new').checked=Boolean(p.new);$('hit').checked=p.status==='Хит продаж';$('featured').checked=Boolean(p.featured);$('scents').checked=Boolean(p.scents);
     $('description').value=p.description||'';$('long').value=p.long||'';
     $('specs').value=labelPairs(p.specifications);$('variants').value=variantPairs(p.variants);
-    imageValue=p.image||'';$('form-photo').src=fileImage(imageValue);renderList();preview();
+    const d=p.dimensions||{};for(const [id,key] of [['dim-height','height_cm'],['dim-length','length_cm'],['dim-width','width_cm'],['dim-weight','weight_g']])$(id).value=d[key]??'';
+    imageValue=p.image||'';extraPhotos=Array.isArray(p.gallery)?p.gallery.slice():[];productVideo=p.video||'';$('gallery-urls').value='';$('product-video').value=/^https?:/.test(productVideo)?productVideo:'';$('form-photo').src=fileImage(imageValue);renderExtraPhotos();renderList();preview();
   }
   function fromForm(){
     if(!$('editor-form').checkValidity()){$('editor-form').reportValidity();return null}
@@ -92,13 +119,14 @@
     const old=getCurrent()||{};
     const specs=parsePairs($('specs').value).filter(x=>x.length>=2).map(([name,...value])=>({name,value:value.join(' | ')}));
     const variants=parsePairs($('variants').value).filter(x=>x.length>=2).map(([name,price],i)=>({id:slugify(name)+'-'+(i+1),title:name,price_rub:Math.max(0,Number(price)||0)}));
+    const dimensions={height_cm:numField('dim-height'),length_cm:numField('dim-length'),width_cm:numField('dim-width'),weight_g:numField('dim-weight')};
     const price=$('price').value.trim()===''?null:Number($('price').value);
     const oldPrice=$('old-price').value.trim()===''?null:Number($('old-price').value);
     return {...old,id,title,subtitle:old.subtitle||$('kind').value.trim(),kind:$('kind').value.trim(),category:mode==='courses'?'courses':$('category').value,
       price_rub:price,old_price_rub:oldPrice,rank:Number($('rank').value)||100,
       active:$('active').checked,new:$('new').checked,status:$('hit').checked?'Хит продаж':$('new').checked?'Новинка':'Авторская работа',
       scents:$('scents').checked,featured:$('featured').checked,description:$('description').value.trim(),long:$('long').value.trim(),
-      image:imageValue||'placeholder-product.svg',editorial:imageValue||'placeholder-product.svg',specifications:specs,variants};
+      image:imageValue||'placeholder-product.svg',editorial:imageValue||'placeholder-product.svg',gallery:[...extraPhotos,...$('gallery-urls').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean)],video:productVideo||$('product-video').value.trim(),dimensions,specifications:specs,variants};
   }
   function save(){
     const data=fromForm();if(!data)return false;
@@ -107,11 +135,13 @@
     current=data.id;previousId=data.id;if(mode==='courses')saveExtra();else safeStore();renderList();preview();return true;
   }
   function add(){
-    current=null;previousId=null;imageValue='';$('editor-form').reset();
+    current=null;previousId=null;imageValue='';extraPhotos=[];productVideo='';$('editor-form').reset();renderExtraPhotos();
     $('form-title').textContent=mode==='courses'?'Новый мастер-класс':'Новое изделие';$('slug').value='';$('rank').value=1+Math.max(0,...activeList().map(p=>p.rank||0));$('active').checked=true;
     $('form-photo').src='../assets/img/placeholder-product.svg';renderList();preview();$('title').focus();
   }
   function preview(){
+    if(mode==='packaging'){previewPackaging();return}
+    $('preview-heading').textContent='ПРЕДПРОСМОТР КАРТОЧКИ';
     $('preview-image').src=imageValue?fileImage(imageValue):'../assets/img/placeholder-product.svg';
     $('preview-title').textContent=$('title').value||'Название изделия';
     $('preview-kind').textContent=$('kind').value||categories[$('category').value]||'Авторская работа';
@@ -119,6 +149,8 @@
     $('preview-price').textContent=rub($('price').value.trim()===''?null:Number($('price').value));
     $('preview-badge').hidden=!$('new').checked&&!$('hit').checked;
     $('preview-badge').textContent=$('hit').checked?'Хит продаж':'Новинка';
+    setPreviewMedia([...extraPhotos,...$('gallery-urls').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean)],productVideo||$('product-video').value.trim());
+    const vid=$('product-video-preview');vid.hidden=!productVideo;if(productVideo)vid.src=/^(data:|https?:|blob:)/.test(productVideo)?productVideo:'../'+productVideo;else vid.removeAttribute('src');
   }
   // Small browser-native ZIP writer: one download for all publishable catalog data files.
   function zipFiles(entries){
@@ -140,6 +172,25 @@
     const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);
     const a=document.createElement('a');a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
   }
+  const numField=id=>{const raw=$(id).value.trim();return raw===''?null:Math.max(0,Number(raw)||0)};
+  function renderExtraPhotos(){
+    const list=$('extra-photo-list');list.replaceChildren();
+    extraPhotos.forEach((src,i)=>{const tile=document.createElement('div');tile.className='media-thumb';const img=document.createElement('img');img.src=mediaSrc(src);img.alt='Фото '+(i+2);const btn=document.createElement('button');btn.type='button';btn.textContent='×';btn.setAttribute('aria-label','Удалить фото '+(i+2));btn.addEventListener('click',()=>{extraPhotos.splice(i,1);renderExtraPhotos();preview()});tile.append(img,btn);list.append(tile)});
+  }
+  ['dim-height','dim-length','dim-width','dim-weight'].forEach(id=>$(id).addEventListener('input',preview));
+  $('extra-photos').addEventListener('change',async e=>{
+    const files=Array.from(e.target.files||[]);if(files.length+extraPhotos.length>6){alert('Максимум 6 дополнительных фото');e.target.value='';return}
+    for(const file of files){if(!file.type.startsWith('image/'))continue;try{extraPhotos.push(await fileToImage(file))}catch(_){alert('Не удалось обработать '+file.name)}}
+    e.target.value='';renderExtraPhotos();preview();status('Дополнительные фото готовы, сохраните карточку');
+  });
+  $('product-video').addEventListener('input',e=>{productVideo=e.target.value.trim();preview()});
+  $('product-video-file').addEventListener('change',async e=>{
+    const file=e.target.files?.[0];if(!file)return;
+    if(!/^video\/(mp4|webm)$/.test(file.type)||file.size>1500000){alert('Поддерживаются MP4/WEBM до 1,5 МБ. Для большого видео используйте ссылку.');e.target.value='';return}
+    productVideo=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)});
+    $('product-video').value='';preview();status('Видео готово, сохраните карточку');
+  });
+  $('product-video-clear').addEventListener('click',()=>{productVideo='';$('product-video').value='';$('product-video-file').value='';preview()});
   async function processFile(file){
     if(!file.type.startsWith('image/')){alert('Выберите фотографию JPG, PNG или WEBP');return}
     try {
@@ -157,6 +208,7 @@
   $('search').addEventListener('input',()=>mode==='packaging'?renderPackaging():renderList());
   $('title').addEventListener('blur',()=>{if(!previousId&&!$('slug').value)$('slug').value=uniqueId(slugify($('title').value))});
   $('photo').addEventListener('change',e=>{const f=e.target.files?.[0];if(f)processFile(f)});
+  $('gallery-urls').addEventListener('input',preview);
   $('clear-photo').addEventListener('click',()=>{imageValue='';$('form-photo').src='../assets/img/placeholder-product.svg';preview()});
   $fields.forEach(f=>{$(f)?.addEventListener('input',preview)});
   $('delete-product').addEventListener('click',()=>{

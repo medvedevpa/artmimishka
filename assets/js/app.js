@@ -100,13 +100,31 @@
     document.title = p.title + ' — ART MIMISHKA';
     const img = $('.detail-gallery img');
     if (img) {img.src=productImage(p);img.alt=p.title+' — фотография изделия';}
+    const detailGallery=$('.detail-gallery');
+    if(detailGallery){
+      detailGallery.querySelectorAll('.a20-gallery-strip,.a20-detail-video').forEach(el=>el.remove());
+      const gallery=Array.isArray(p.gallery)?p.gallery.filter(Boolean).slice(0,12):[];
+      if(gallery.length){
+        const strip=document.createElement('div');strip.className='a20-gallery-strip';
+        const sources=[p.image,...gallery];
+        sources.forEach((src,i)=>{
+          const btn=document.createElement('button');btn.type='button';btn.className='a20-gallery-thumb';btn.setAttribute('aria-label','Показать фото '+(i+1));
+          const thumb=document.createElement('img');thumb.alt='';thumb.src=productImage({image:src});thumb.loading='lazy';btn.append(thumb);
+          if(i===0)btn.classList.add('active');
+          btn.addEventListener('click',()=>{if(img){img.src=thumb.src;img.alt=p.title+' — фото '+(i+1)}strip.querySelectorAll('button').forEach(b=>b.classList.remove('active'));btn.classList.add('active')});
+          strip.append(btn);
+        });detailGallery.append(strip);
+      }
+      if(p.video){const video=document.createElement('video');video.className='a20-detail-video';video.controls=true;video.playsInline=true;video.preload='metadata';video.setAttribute('aria-label','Видео изделия');video.src=/^(data:|https?:|blob:)/.test(p.video)?p.video:prefix+p.video;detailGallery.append(video)}
+    }
     const h1 = $('.detail-info h1');if(h1)h1.textContent=p.title;
     const sub=$('.detail-subtitle');if(sub)sub.textContent=p.description || '';
     const summary=$('.detail-info > p:not(.detail-subtitle):not(.helper)');if(summary)summary.textContent=p.description || p.long || '';
     const kind=$('.detail-info .eyebrow');if(kind)kind.textContent=(p.kind||'Авторская работа')+' · ART MIMISHKA';
     const priceInfo=$('.detail-meta');
     if(priceInfo){priceInfo.replaceChildren();
-      const rows=[['Стоимость',rub(product.price)], ...(p.specifications||[]).map(o=>[o.name,o.value]), ['Наличие и сроки','Уточняются при заказе']];
+      const d=p.dimensions||{};const dims=[['Высота',d.height_cm,'см'],['Длина',d.length_cm,'см'],['Ширина',d.width_cm,'см'],['Вес',d.weight_g,'г']].filter(x=>x[1]!=null&&x[1]!==''&&Number(x[1])>0).map(([name,n,unit])=>[name,String(n)+' '+unit]);
+      const rows=[['Стоимость',rub(product.price)],...dims,...(p.specifications||[]).filter(o=>!dims.some(d=>d[0].toLowerCase()===String(o.name).toLowerCase())).map(o=>[o.name,o.value]), ['Наличие и сроки','Уточняются при заказе']];
       for (const [label,value] of rows) {const row=document.createElement('div');const sp=document.createElement('span');sp.textContent=label;const strong=document.createElement('strong');strong.textContent=value;row.append(sp,strong);priceInfo.append(row);}
     }
     const story = $('.product-story-main');
